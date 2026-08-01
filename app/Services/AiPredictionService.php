@@ -15,7 +15,7 @@ class AiPredictionService
 
     public function __construct()
     {
-        $this->serviceUrl = config('services.ai.url', env('AI_SERVICE_URL', 'http://localhost:8000'));
+        $this->serviceUrl = config('services.ai.url', 'http://localhost:8000');
     }
 
     /**

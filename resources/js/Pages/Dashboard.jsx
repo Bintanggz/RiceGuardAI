@@ -44,7 +44,7 @@ export default function Dashboard({ predictions }) {
                 </h1>
                 <p className="hero-description">
                     Upload foto daun padi dan sistem AI kami akan mengidentifikasi penyakit
-                    secara instan dengan tingkat akurasi tinggi. Mendukung deteksi Leaf Blast,
+                    secara instan dengan tingkat akurasi tinggi. Mendukung deteksi Leaf Smut,
                     Brown Spot, dan Bacterial Leaf Blight.
                 </p>
             </section>
