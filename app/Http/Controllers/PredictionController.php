@@ -18,12 +18,26 @@ class PredictionController extends Controller
     }
 
     /**
-     * Tampilkan dashboard dengan riwayat prediksi.
+     * Tampilkan dashboard dengan riwayat prediksi dan statistik.
      */
     public function index()
     {
+        $allPredictions = Prediction::all();
+
+        $totalPredictions = $allPredictions->count();
+        $avgConfidence = $totalPredictions > 0
+            ? round($allPredictions->avg('confidence') * 100)
+            : 0;
+
+        $mostCommon = $totalPredictions > 0
+            ? Prediction::select('result')
+                ->selectRaw('COUNT(*) as count')
+                ->groupBy('result')
+                ->orderByDesc('count')
+                ->first()?->result ?? '-'
+            : '-';
+
         $predictions = Prediction::orderBy('created_at', 'desc')
-            ->take(20)
             ->get()
             ->map(function ($prediction) {
                 return [
@@ -38,6 +52,11 @@ class PredictionController extends Controller
 
         return Inertia::render('Dashboard', [
             'predictions' => $predictions,
+            'stats' => [
+                'total' => $totalPredictions,
+                'most_common' => $mostCommon,
+                'avg_confidence' => $avgConfidence,
+            ],
         ]);
     }
 
@@ -72,6 +91,25 @@ class PredictionController extends Controller
             }
 
             return redirect()->route('dashboard')->with('error', $e->getMessage());
+        }
+    }
+
+    /**
+     * Hapus riwayat prediksi tertentu.
+     */
+    public function destroy(Prediction $prediction)
+    {
+        try {
+            // Hapus file gambar dari disk public
+            if ($prediction->image_path && Storage::disk('public')->exists($prediction->image_path)) {
+                Storage::disk('public')->delete($prediction->image_path);
+            }
+
+            $prediction->delete();
+
+            return redirect()->route('dashboard')->with('success', 'Riwayat prediksi berhasil dihapus.');
+        } catch (\Exception $e) {
+            return redirect()->route('dashboard')->with('error', 'Gagal menghapus riwayat: ' . $e->getMessage());
         }
     }
 }

@@ -4,8 +4,9 @@ import AppLayout from '../Layouts/AppLayout';
 import UploadForm from '../Components/UploadForm';
 import PredictionResult from '../Components/PredictionResult';
 import HistoryTable from '../Components/HistoryTable';
+import StatsCards from '../Components/StatsCards';
 
-export default function Dashboard({ predictions }) {
+export default function Dashboard({ predictions, stats }) {
     const { flash } = usePage().props;
     const [processing, setProcessing] = useState(false);
 
@@ -48,6 +49,9 @@ export default function Dashboard({ predictions }) {
                     Brown Spot, dan Bacterial Leaf Blight.
                 </p>
             </section>
+
+            {/* Stats Summary Cards */}
+            <StatsCards stats={stats} />
 
             {/* Flash Messages */}
             {flash?.success && (

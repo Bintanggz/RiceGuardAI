@@ -96,6 +96,19 @@ export default function PredictionResult({ prediction }) {
                 </div>
             </div>
 
+            {/* Low Confidence Warning */}
+            {confidencePercent < 60 && (
+                <div className="confidence-warning-box">
+                    <span>⚠️</span>
+                    <div>
+                        <strong>Tingkat Keyakinan Rendah ({confidencePercent}%)</strong>
+                        <p>
+                            Hasil prediksi mungkin kurang akurat. Disarankan untuk mengambil foto ulang daun padi dengan posisi lebih dekat, terfokus, dan pencahayaan yang cukup.
+                        </p>
+                    </div>
+                </div>
+            )}
+
             {/* Deskripsi */}
             <div className="result-info-section">
                 <div className="result-info-title">📋 Deskripsi</div>
